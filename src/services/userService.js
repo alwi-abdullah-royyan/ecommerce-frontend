@@ -44,17 +44,22 @@ export async function getUserById(id, token) {
   }
 }
 
-export async function updateUser(id, user, role, email, token) {
+export async function updateUser(id, { username, email, role, password, confirmPassword }, token) {
   try {
-    const response = await axios.put(
-      `${api}/user/${id}`,
-      { user, role, email },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const payload = {};
+
+    if (username) payload.username = username;
+    if (email) payload.email = email;
+    if (role) payload.role = role;
+    if (password) payload.password = password;
+    if (confirmPassword) payload.confirmPassword = confirmPassword;
+
+    const response = await axios.put(`${api}/user/${id}`, payload, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     return response.data.data;
   } catch (err) {
     console.log("Failed to update user");

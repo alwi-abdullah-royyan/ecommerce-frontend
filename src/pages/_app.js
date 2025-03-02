@@ -5,6 +5,7 @@ import store from "@/redux/store";
 import RouteGuard from "@/services/RouteGuard";
 import "@/styles/globals.css";
 import { ToastProvider } from "@/services/ToastService";
+import FloatingCart from "@/components/organisms/FloatingCart";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -16,6 +17,7 @@ export default function App({ Component, pageProps }) {
             <main className="flex-grow">
               <Component {...pageProps} />
             </main>
+            <FloatingCart />
             <Footer />
           </div>
         </ToastProvider>

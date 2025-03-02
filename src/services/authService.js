@@ -19,9 +19,23 @@ export async function me(token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data.data;
+    return response.data;
   } catch (err) {
     console.log("Failed to fetch user");
+    return err;
+  }
+}
+
+export async function refreshToken(token) {
+  try {
+    const response = await axios.get(`${api}/auth/refresh`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (err) {
+    console.log("Failed to refresh token");
     return err;
   }
 }

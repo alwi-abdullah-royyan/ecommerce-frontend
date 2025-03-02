@@ -30,6 +30,19 @@ export async function getOrderById(id, token) {
   }
 }
 
+export async function getOrderByUser(token) {
+  try {
+    const response = await axios.get(`${api}/order/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (err) {
+    console.log("Failed to fetch order");
+    return err;
+  }
+}
 export async function createOrder(token) {
   try {
     const response = await axios.get(`${api}/order/create`, {

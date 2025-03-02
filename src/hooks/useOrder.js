@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllOrder, getOrderById, changeOrderStatus } from "./services/orderService";
+import { changeOrderStatus, getAllOrder, getOrderById, getOrderByUser } from "@/services/orderService";
 
 // 🟢 Hook to fetch all orders
 export const useAllOrders = (token) => {
@@ -31,7 +31,6 @@ export const useAllOrders = (token) => {
   return { data, loading, error };
 };
 
-// 🟢 Hook to fetch an order by ID
 export const useOrderById = (id, token) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -61,7 +60,6 @@ export const useOrderById = (id, token) => {
   return { data, loading, error };
 };
 
-// 🟢 Hook to change order status
 export const useChangeOrderStatus = (id, status, token) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -85,3 +83,34 @@ export const useChangeOrderStatus = (id, status, token) => {
 
   return { data, loading, error, changeOrderStatus: changeStatusHandler };
 };
+
+export function useOrderUser(token) {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchOrders = async () => {
+      setLoading(true);
+      try {
+        const response = await getOrderByUser(token);
+
+        if (response?.status === 200) {
+          setOrders(response.data.data.content);
+        } else {
+          setError("Failed to load orders");
+        }
+      } catch (err) {
+        setError("Error fetching orders");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [token]);
+
+  return { orders, loading, error };
+}
