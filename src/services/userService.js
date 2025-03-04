@@ -9,7 +9,7 @@ export async function register(username, email, password, confirmPassword) {
       password,
       confirmPassword,
     });
-    return { status: true, token: response.data.data };
+    return response;
   } catch (err) {
     console.log("Register failed : ", err);
     return { status: false, error: err };
@@ -23,7 +23,7 @@ export async function getAllUser(page = 0, size = 10, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data.data;
+    return response.data;
   } catch (err) {
     console.log("Failed to fetch user");
     return err;

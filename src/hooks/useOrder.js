@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   changeOrderStatus,
   getAllOrder,
@@ -55,29 +55,27 @@ export const useOrderById = (id, token) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const fetchOrderById = useCallback(async () => {
     if (!id || !token) return;
 
-    setData(null);
-    setError(null);
     setLoading(true);
+    setError(null);
 
-    const fetchOrderById = async () => {
-      try {
-        const orderData = await getOrderById(id, token);
-
-        setData(orderData);
-      } catch (err) {
-        setError("Failed to fetch order.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrderById();
+    try {
+      const orderData = await getOrderById(id, token);
+      setData(orderData);
+    } catch (err) {
+      setError("Failed to fetch order.");
+    } finally {
+      setLoading(false);
+    }
   }, [id, token]);
 
-  return { data, loading, error };
+  useEffect(() => {
+    fetchOrderById();
+  }, [fetchOrderById]);
+
+  return { data, loading, error, refetch: fetchOrderById };
 };
 
 export const useChangeOrderStatus = (id, status, token) => {

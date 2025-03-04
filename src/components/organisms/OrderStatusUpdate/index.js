@@ -22,7 +22,7 @@ const OrderStatusUpdate = ({ orderId, token, onStatusChange }) => {
     const response = await changeOrderStatus(orderId, selectedStatus, token);
     if (response?.status === 200) {
       alert("Order status updated successfully");
-      onStatusChange(); // Refresh the order details
+      onStatusChange();
     } else {
       alert("Failed to update order status");
     }
@@ -37,7 +37,7 @@ const OrderStatusUpdate = ({ orderId, token, onStatusChange }) => {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md"
+              className="px-3 py-2 border text-black border-gray-300 rounded-md"
             >
               {availableStatuses.map((status) => (
                 <option key={status} value={status}>

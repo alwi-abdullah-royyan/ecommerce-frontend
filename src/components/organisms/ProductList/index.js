@@ -1,9 +1,10 @@
 import ButtonOnclick from "@/components/atoms/ButtonOnclick";
 import Icons from "@/components/atoms/Icons";
 import ProductCard from "@/components/molecules/ProductCard";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export default function ProductList({ data, admin = false }) {
+  const router = useRouter();
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {admin && (

@@ -64,6 +64,7 @@ export async function deleteCategory(id, token) {
         Authorization: `Bearer ${token}`,
       },
     });
+
     return response.data.data;
   } catch (err) {
     console.log("Failed to delete category");

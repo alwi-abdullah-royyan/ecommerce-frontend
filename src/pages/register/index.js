@@ -8,17 +8,20 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
-  const { delayedToast } = useToast();
+  const { showToast } = useToast();
   const handleRegister = async ({ username, email, password, confirmPassword }) => {
     setLoading(true);
     setError(null);
 
     try {
       const response = await register(username, email, password, confirmPassword);
+      console.log(response);
+
       if (response.status != 200) {
-        throw response.error.response.data.message;
+        setError("error during register");
+        return;
       }
-      delayedToast("Register Success");
+      showToast("Register Success");
 
       router.push("/login");
     } catch (err) {

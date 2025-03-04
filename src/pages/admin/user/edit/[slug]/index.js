@@ -43,9 +43,16 @@ export default function EditUserPage() {
     setSuccess("");
 
     try {
-      await updateUser(slug, formData, token);
+      const response = await updateUser(slug, formData, token);
+      console.log(response);
+
+      if (response?.status !== 200) {
+        setErrorUpdate(response.response.data.message);
+        setLoadingUpdate(false);
+        return;
+      }
       setSuccess("User updated successfully!");
-      setTimeout(() => router.push("/admin/users"), 1000);
+      setTimeout(() => router.push("/admin/user"), 1000);
     } catch (err) {
       setErrorUpdate("Failed to update user.");
     }

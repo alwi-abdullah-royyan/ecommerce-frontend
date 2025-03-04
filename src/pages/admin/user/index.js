@@ -9,6 +9,7 @@ export default function UsersPage() {
   const [size, setSize] = useState(10);
   const token = getToken();
   const { data, loading, error } = useAllUsers(page, size, token);
+  console.log(data);
 
   return (
     <div className="max-w-6xl my-4 mx-auto px-4 pb-8">
@@ -19,10 +20,10 @@ export default function UsersPage() {
       {error && <p className="text-center text-red-500">{error}</p>}
 
       {/* User List */}
-      {data && <UserList users={data} />}
+      {data && <UserList users={data.data} />}
 
       {/* Pagination Controls */}
-      {data?.totalPages > 1 && <PaginationControls page={page} totalPages={data.totalPages} setPage={setPage} />}
+      {<PaginationControls page={page} totalPages={data?.totalPages} setPage={setPage} />}
     </div>
   );
 }

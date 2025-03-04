@@ -94,7 +94,7 @@ const Dashboard = () => {
         {loadingUsers && <p className="text-center text-gray-400">Loading users...</p>}
         {errorUsers && <p className="text-center text-red-500">{errorUsers}</p>}
         <div className="overflow-auto max-h-60">
-          <UserList users={users} />
+          <UserList users={users?.data} />
         </div>
       </section>
     </div>
