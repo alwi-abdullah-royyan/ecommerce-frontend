@@ -1,5 +1,5 @@
+import { getAllUser, getUserById } from "@/services/userService";
 import { useState, useEffect } from "react";
-import { getAllUser, getUserById } from "./services/userService";
 
 export const useAllUsers = (page = 0, size = 10, token) => {
   const [data, setData] = useState(null);
@@ -16,6 +16,7 @@ export const useAllUsers = (page = 0, size = 10, token) => {
     const fetchAllUsers = async () => {
       try {
         const userData = await getAllUser(page, size, token);
+
         setData(userData);
       } catch (err) {
         setError("Failed to fetch users.");
@@ -30,7 +31,6 @@ export const useAllUsers = (page = 0, size = 10, token) => {
   return { data, loading, error };
 };
 
-// 🟢 Hook to fetch a user by ID
 export const useUserById = (id, token) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);

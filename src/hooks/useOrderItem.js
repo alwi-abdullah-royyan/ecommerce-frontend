@@ -1,5 +1,5 @@
+import { getOrderItemById } from "@/services/orderItemService";
 import { useState, useEffect } from "react";
-import { getOrderItemById } from "./services/orderItemService";
 
 export const useOrderItemById = (id, token) => {
   const [data, setData] = useState(null);
@@ -16,7 +16,8 @@ export const useOrderItemById = (id, token) => {
     const fetchOrderItem = async () => {
       try {
         const orderItemData = await getOrderItemById(id, token);
-        setData(orderItemData);
+
+        setData(orderItemData.data.data);
       } catch (err) {
         setError("Failed to fetch order item.");
       } finally {

@@ -73,7 +73,7 @@ export function isAuthenticated() {
     }
     return true;
   } catch (err) {
-    console.error("Authentication check failed:", err);
+    console.log("Authentication check failed:", err);
     return false;
   }
 }
@@ -86,7 +86,7 @@ export function isAdminUser() {
 
     return decoded.role === "ADMIN"; // Check if isAdmin is true
   } catch (err) {
-    console.error("Admin check failed:", err);
+    console.log("Admin check failed:", err);
     return false;
   }
 }

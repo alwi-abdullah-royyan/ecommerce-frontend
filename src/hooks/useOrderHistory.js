@@ -1,5 +1,5 @@
+import { getOrderHistoryById } from "@/services/orderHistoryService";
 import { useState, useEffect } from "react";
-import { getOrderHistoryById } from "./services/orderHistoryService";
 
 export const useOrderHistoryById = (id, token) => {
   const [data, setData] = useState(null);

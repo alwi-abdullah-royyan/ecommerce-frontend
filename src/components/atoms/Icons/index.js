@@ -1,28 +1,22 @@
+import AddBox from "./AddBox";
 import Back from "./Back";
+import Cart from "./Cart";
 import Emoji404 from "./Emoji404";
-import Explore from "./Explore";
-import Feeds from "./Feeds";
-import Friends from "./Friends";
 import Hamburger from "./Hamburger";
 import Login from "./Login";
-import Messages from "./Messages";
-import Notification from "./Notification";
-import Search from "./Search";
-import Settings from "./Settings";
+import Logout from "./Logout";
+import Profile from "./Profile";
 import Trash from "./Trash";
 
 const Icons = {
-  Feeds,
-  Explore,
-  Notification,
-  Messages,
-  Friends,
-  Settings,
-  Search,
   Back,
   Emoji404,
   Hamburger,
   Login,
   Trash,
+  Logout,
+  Profile,
+  Cart,
+  AddBox,
 };
 export default Icons;

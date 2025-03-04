@@ -16,7 +16,7 @@ const LoginForm = ({ onSubmit, loading, error }) => {
 
   return (
     <form onSubmit={handleSubmit} className="text-black">
-      <h2 className="text-2xl font-semibold mb-4">Login</h2>
+      <h2 className="text-2xl font-semibold mb-4">Register</h2>
       <InputField
         label="Username"
         type="text"

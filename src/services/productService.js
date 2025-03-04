@@ -50,9 +50,10 @@ export async function updateProduct(id, formData, token) {
     const response = await axios.put(`${api}/product/${id}`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     });
-    return response.data.data;
+    return response;
   } catch (err) {
     console.log("Failed to update product");
     return err;
@@ -61,14 +62,16 @@ export async function updateProduct(id, formData, token) {
 
 export async function createProduct(formData, token) {
   try {
-    const response = await axios.post(`${api}/product`, formData, {
+    const response = await axios.post(`${api}/product/add`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
     });
-    return response.data.data;
+
+    return response;
   } catch (err) {
-    console.log("Failed to create product");
+    console.log("Failed to create product", err);
     return err;
   }
 }
@@ -80,7 +83,7 @@ export async function deleteProduct(id, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data.data;
+    return response;
   } catch (err) {
     console.log("Failed to delete product");
     return err;

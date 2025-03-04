@@ -15,6 +15,7 @@ export const useAllCategories = () => {
     const fetchAllCategories = async () => {
       try {
         const categoryData = await getAllCategory();
+
         setData(categoryData);
       } catch (err) {
         setError("Failed to fetch categories.");

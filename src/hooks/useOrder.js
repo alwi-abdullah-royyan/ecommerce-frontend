@@ -1,34 +1,53 @@
 import { useState, useEffect } from "react";
-import { changeOrderStatus, getAllOrder, getOrderById, getOrderByUser } from "@/services/orderService";
+import {
+  changeOrderStatus,
+  getAllOrder,
+  getOrderById,
+  getOrderByStatus,
+  getOrderByUser,
+  getOrderByUserAndStatus,
+} from "@/services/orderService";
 
-// 🟢 Hook to fetch all orders
-export const useAllOrders = (token) => {
-  const [data, setData] = useState(null);
+export const useOrderByStatus = (token, status = null, page = 0, size = 10) => {
+  const [data, setData] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!token) return;
 
-    setData(null);
+    setData([]);
     setError(null);
     setLoading(true);
 
-    const fetchAllOrders = async () => {
+    const fetchOrderByStatus = async () => {
       try {
-        const orderData = await getAllOrder(token);
-        setData(orderData);
+        let response;
+        if (status) {
+          response = await getOrderByStatus(token, status, page, size);
+        } else {
+          response = await getAllOrder(token, page, size);
+        }
+
+        if (response?.status === 200) {
+          setData(response.data.data);
+          setTotalPages(response.data.totalPages || 1);
+        } else {
+          setError("Failed to fetch orders.");
+        }
       } catch (err) {
-        setError("Failed to fetch all orders.");
+        console.log("Error fetching orders:", err);
+        setError("Failed to fetch order by status.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchAllOrders();
-  }, [token]);
+    fetchOrderByStatus();
+  }, [status, token, page, size]);
 
-  return { data, loading, error };
+  return { data, totalPages, loading, error };
 };
 
 export const useOrderById = (id, token) => {
@@ -46,6 +65,7 @@ export const useOrderById = (id, token) => {
     const fetchOrderById = async () => {
       try {
         const orderData = await getOrderById(id, token);
+
         setData(orderData);
       } catch (err) {
         setError("Failed to fetch order.");
@@ -84,33 +104,43 @@ export const useChangeOrderStatus = (id, status, token) => {
   return { data, loading, error, changeOrderStatus: changeStatusHandler };
 };
 
-export function useOrderUser(token) {
+export function useOrdersUserAndStatus(token, status = null, initialPage = 0, pageSize = 10) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(initialPage);
+  const [totalPages, setTotalPages] = useState(1); // Default total pages
 
   useEffect(() => {
-    if (!token) return;
-
     const fetchOrders = async () => {
-      setLoading(true);
       try {
-        const response = await getOrderByUser(token);
+        setLoading(true);
+        let response;
 
-        if (response?.status === 200) {
-          setOrders(response.data.data.content);
+        if (status) {
+          response = await getOrderByUserAndStatus(token, status, currentPage, pageSize);
         } else {
+          response = await getOrderByUser(token, currentPage, pageSize);
+        }
+
+        if (response?.status !== 200) {
           setError("Failed to load orders");
+        } else {
+          setOrders(response.data.data);
+          setTotalPages(response.data.totalPages || 1); // Get total pages from API response
         }
       } catch (err) {
-        setError("Error fetching orders");
+        console.log("Failed to fetch orders", err);
+        setError(err.message || "An error occurred");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchOrders();
-  }, [token]);
+    if (token) {
+      fetchOrders();
+    }
+  }, [token, status, currentPage, pageSize]); // Re-fetch when page changes
 
-  return { orders, loading, error };
+  return { orders, loading, error, currentPage, setCurrentPage, totalPages };
 }

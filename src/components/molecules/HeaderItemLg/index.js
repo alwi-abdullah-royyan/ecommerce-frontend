@@ -8,7 +8,7 @@ const HeaderItemLg = ({ authStatus, username, isAdmin }) => {
     <>
       {/* Logo */}
       <Link href="/" className="text-2xl font-bold text-blue-500">
-        ToDoList
+        E-Commerce
       </Link>
 
       {/* Navigation Links */}
@@ -17,29 +17,26 @@ const HeaderItemLg = ({ authStatus, username, isAdmin }) => {
           Home
         </Link>
         {isAdmin && (
-          <Link href="/todolist/dashboard" className="hover:text-blue-500 transition-colors">
+          <Link href="/admin/dashboard" className="hover:text-blue-500 transition-colors">
             Dashboard
           </Link>
         )}
-        <Link href="/todolist/category" className="hover:text-blue-500 transition-colors">
-          Category
+        <Link href="/cart" className="hover:text-blue-500 transition-colors">
+          Cart
         </Link>
-        <Link href="/todolist/trash" className="hover:text-blue-500 transition-colors">
-          Trash
+        <Link href="/order" className="hover:text-blue-500 transition-colors">
+          Order
         </Link>
       </nav>
 
       {/* Profile / Login */}
       {authStatus ? (
         <div className="hidden md:flex space-x-4">
-          <Link
-            href={`/todolist/profile/${username}`}
-            className="hover:bg-blue-800 transition-colors text-white px-4 py-2 rounded-md"
-          >
-            Profile
+          <Link href={`/profile`} className="hover:bg-blue-800 transition-colors text-white px-4 py-2 rounded-md">
+            <Icons.Profile />
           </Link>
           <button onClick={logout} className="hover:bg-red-600 transition-colors text-white px-4 py-2 rounded-md">
-            Logout
+            <Icons.Logout />
           </button>
         </div>
       ) : (

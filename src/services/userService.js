@@ -37,7 +37,7 @@ export async function getUserById(id, token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data.data;
+    return response.data;
   } catch (err) {
     console.log("Failed to fetch user");
     return err;
@@ -54,13 +54,13 @@ export async function updateUser(id, { username, email, role, password, confirmP
     if (password) payload.password = password;
     if (confirmPassword) payload.confirmPassword = confirmPassword;
 
-    const response = await axios.put(`${api}/user/${id}`, payload, {
+    const response = await axios.put(`${api}/user/update/${id}`, payload, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
-    return response.data.data;
+    return response.data;
   } catch (err) {
     console.log("Failed to update user");
     return err;

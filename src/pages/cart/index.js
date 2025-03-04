@@ -4,11 +4,14 @@ import { getImageProduct } from "@/services/productService";
 import { checkCart, manageCart, deleteCart } from "@/services/cartService";
 import Image from "next/image";
 import { useState, useMemo } from "react";
+import { createOrder } from "@/services/orderService";
+import { useToast } from "@/services/ToastService";
 
 const Cart = () => {
   const token = getToken();
   const { data: cart, loading, error, refetch } = useCart(token);
   const [checkedItems, setCheckedItems] = useState({});
+  const { showToast } = useToast();
 
   const handleCheck = async (id, checked) => {
     await checkCart(id, checked, token);
@@ -32,8 +35,18 @@ const Cart = () => {
       .reduce((sum, item) => sum + item.price * item.qty, 0);
   }, [cart, checkedItems]);
 
-  const handleBuy = () => {
-    alert(`Proceeding to buy items worth $${totalPrice.toFixed(2)}`);
+  const handleBuy = async () => {
+    try {
+      const response = await createOrder(token);
+      console.log(response);
+
+      response.status === 200
+        ? showToast("Order created successfully.")
+        : showToast(response.response.data.message, "error");
+    } catch (error) {
+      console.log(error);
+      showToast("Something went wrong. Please try again.", "error");
+    }
   };
 
   if (loading) return <p className="text-center text-gray-400">Loading...</p>;

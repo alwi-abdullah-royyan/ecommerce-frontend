@@ -14,28 +14,31 @@ const HeaderItemSm = ({ isOpen, authStatus, username, isAdmin }) => {
               Home
             </Link>
             {isAdmin && (
-              <Link href="/todolist/dashboard" className="hover:text-blue-500 transition-colors">
+              <Link href="/admin/dashboard" className="hover:text-blue-500 transition-colors">
                 Dashboard
               </Link>
             )}
-            <Link href="/todolist/category" className="hover:text-blue-500 transition-colors">
-              Category
+            <Link href="/cart" className="hover:text-blue-500 transition-colors">
+              Cart
             </Link>
-            <Link href="/todolist/trash" className="hover:text-blue-500 transition-colors">
-              Trash
+            <Link href="/order" className="hover:text-blue-500 transition-colors">
+              Order
             </Link>
 
             {authStatus ? (
               <>
-                <Link href={`/todolist/profile/${username}`} className="hover:text-blue-500 transition-colors">
-                  Profile
+                <Link href={`/profile`} className="flex hover:text-blue-500 transition-colors">
+                  <Icons.Profile /> Profile
                 </Link>
-                <button onClick={logout} className="hover:bg-red-600 transition-colors text-white px-4 py-2 rounded-md">
-                  Logout
+                <button
+                  onClick={logout}
+                  className="flex hover:bg-red-600 transition-colors text-red px-4 py-2 rounded-md"
+                >
+                  <Icons.Logout /> Logout
                 </button>
               </>
             ) : (
-              <Link href="/login" className="hover:text-blue-500 transition-colors">
+              <Link href="/login" className="flex hover:text-blue-500 transition-colors">
                 <div className="flex">
                   <Icons.Login /> Login
                 </div>

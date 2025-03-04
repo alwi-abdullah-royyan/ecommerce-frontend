@@ -1,17 +1,32 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 const api = process.env.NEXT_PUBLIC_API;
 
-export async function getAllOrder(token) {
+export async function getAllOrder(token, page = 0, size = 10) {
   try {
     const response = await axios.get(`${api}/order/all`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      params: { page, size },
     });
-    return response.data.data;
+    return response;
   } catch (err) {
-    console.log("Failed to fetch order");
+    console.log("Failed to fetch orders", err);
+    return err;
+  }
+}
+
+export async function getOrderByStatus(token, status, page = 0, size = 10) {
+  try {
+    const response = await axios.get(`${api}/order/filter`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: { status, page, size },
+    });
+    return response;
+  } catch (err) {
+    console.log("Failed to fetch orders", err);
     return err;
   }
 }
@@ -30,19 +45,36 @@ export async function getOrderById(id, token) {
   }
 }
 
-export async function getOrderByUser(token) {
+export async function getOrderByUser(token, page = 0, size = 10) {
   try {
     const response = await axios.get(`${api}/order/user`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      params: { page, size },
     });
     return response;
   } catch (err) {
-    console.log("Failed to fetch order");
+    console.log("Failed to fetch orders", err);
     return err;
   }
 }
+
+export async function getOrderByUserAndStatus(token, status, page = 0, size = 10) {
+  try {
+    const response = await axios.get(`${api}/order/user/filter`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: { status, page, size },
+    });
+    return response;
+  } catch (err) {
+    console.log("Failed to fetch orders by status", err);
+    return err;
+  }
+}
+
 export async function createOrder(token) {
   try {
     const response = await axios.get(`${api}/order/create`, {
@@ -82,7 +114,9 @@ export async function changeOrderStatus(id, status, token) {
         },
       }
     );
-    return response.data.data;
+    console.log(response);
+
+    return response;
   } catch (err) {
     console.log("Failed to change order status");
     return err;

@@ -4,7 +4,7 @@ const api = process.env.NEXT_PUBLIC_API;
 export async function getAllCategory() {
   try {
     const response = await axios.get(`${api}/category/all`);
-    return response.data.data;
+    return response.data;
   } catch (err) {
     console.log("Failed to fetch category");
     return err;

@@ -11,16 +11,17 @@ export default function App({ Component, pageProps }) {
   return (
     <Provider store={store}>
       <RouteGuard>
-        <ToastProvider>
-          <div className="flex flex-col min-h-screen bg-white">
-            <Header />
+        <div className="flex flex-col min-h-screen bg-white">
+          <Header />
+          <ToastProvider>
             <main className="flex-grow">
               <Component {...pageProps} />
             </main>
-            <FloatingCart />
-            <Footer />
-          </div>
-        </ToastProvider>
+          </ToastProvider>
+
+          <FloatingCart />
+          <Footer />
+        </div>
       </RouteGuard>
     </Provider>
   );

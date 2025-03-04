@@ -26,7 +26,7 @@ export async function manageCart(qty, productId, token) {
         },
       }
     );
-    return response.data.data;
+    return response;
   } catch (err) {
     console.log("Failed to update cart");
     return err;

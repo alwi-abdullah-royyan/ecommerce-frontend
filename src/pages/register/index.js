@@ -1,6 +1,4 @@
-// src/components/pages/LoginPage.jsx
 import { useState } from "react";
-import { login } from "../../services/authService"; // Example auth service
 import { useRouter } from "next/router";
 import RegisterForm from "../../components/templates/RegisterForm";
 import { register } from "@/services/userService";
