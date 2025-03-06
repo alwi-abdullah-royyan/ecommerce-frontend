@@ -18,8 +18,10 @@ const FloatingCart = () => {
   }, []);
 
   const hiddenPages = ["/checkout", "/cart"];
+  const isAdminPage = router.pathname.startsWith("/admin");
 
-  if (!isClient || !token || hiddenPages.includes(router.pathname)) {
+  if (!isClient || !token || hiddenPages.includes(router.pathname) || isAdminPage) {
+    open && ysetOpen(false);
     return null;
   }
 
@@ -35,7 +37,10 @@ const FloatingCart = () => {
       {/* Cart Button */}
       <button
         className="relative w-16 h-16 bg-blue-700 text-white rounded-full flex items-center justify-center shadow-lg cursor-pointer hover:bg-green-600 transition"
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          refetch();
+          setOpen(!open);
+        }}
       >
         <Icons.Cart />
         {cart?.data?.length > 0 && (

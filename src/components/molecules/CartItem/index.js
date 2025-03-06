@@ -5,7 +5,7 @@ const CartItem = ({ item, handleDelete }) => {
   return (
     <div className="flex items-center justify-between p-2 border-b border-gray-700">
       <Image
-        src={getImageProduct(item.product.image)}
+        src={getImageProduct(item.product.id)}
         width={40}
         height={40}
         alt={item.product.name}

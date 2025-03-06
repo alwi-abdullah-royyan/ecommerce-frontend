@@ -1,31 +1,33 @@
 import { useCart } from "@/hooks/useCart";
 import { getToken } from "@/services/authService";
-import { getImageProduct } from "@/services/productService";
 import { checkCart, manageCart, deleteCart } from "@/services/cartService";
-import Image from "next/image";
-import { useState, useMemo } from "react";
 import { createOrder } from "@/services/orderService";
+import { useState, useMemo } from "react";
 import { useToast } from "@/services/ToastService";
+import CartItem from "@/components/organisms/CartItem";
+import ButtonOnclick from "@/components/atoms/ButtonOnclick";
+import { useRouter } from "next/router";
 
 const Cart = () => {
   const token = getToken();
   const { data: cart, loading, error, refetch } = useCart(token);
   const [checkedItems, setCheckedItems] = useState({});
   const { showToast } = useToast();
-
+  const router = useRouter();
   const handleCheck = async (id, checked) => {
     await checkCart(id, checked, token);
     setCheckedItems((prev) => ({ ...prev, [id]: checked }));
   };
 
   const handleQtyChange = async (qty, productId) => {
+    if (qty < 1) return;
     await manageCart(qty, productId, token);
     refetch();
   };
 
   const handleDelete = async (id) => {
     await deleteCart(id, token);
-    refetch(); // Refresh cart after deletion
+    refetch();
   };
 
   const totalPrice = useMemo(() => {
@@ -39,12 +41,13 @@ const Cart = () => {
     try {
       const response = await createOrder(token);
       console.log(response);
+      if (response.status === 200) {
+        showToast("Order created successfully.");
+        router.push(`/order/${response.data.data.id}`);
+      }
 
-      response.status === 200
-        ? showToast("Order created successfully.")
-        : showToast(response.response.data.message, "error");
+      showToast(response.response.data.message, "error");
     } catch (error) {
-      console.log(error);
       showToast("Something went wrong. Please try again.", "error");
     }
   };
@@ -62,64 +65,25 @@ const Cart = () => {
         <>
           <div className="space-y-4">
             {cart.data.map((item) => (
-              <div key={item.id} className="flex flex-wrap items-center justify-between p-4 bg-gray-800 rounded-md">
-                <div className="flex items-center gap-3 w-full sm:w-auto">
-                  <input
-                    type="checkbox"
-                    checked={checkedItems[item.id] ?? item.checked}
-                    onChange={(e) => handleCheck(item.id, e.target.checked)}
-                    className="w-5 h-5 accent-green-500"
-                  />
-                  <Image
-                    src={getImageProduct(item.product.image)}
-                    width={80}
-                    height={80}
-                    alt={item.product.name}
-                    className="w-16 h-16 rounded-md"
-                  />
-                  <div>
-                    <p className="text-white font-medium text-sm sm:text-base">{item.product.name}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <button
-                        onClick={() => handleQtyChange(item.qty - 1, item.product.id)}
-                        disabled={item.qty <= 1}
-                        className="px-2 py-1 bg-gray-700 text-white rounded disabled:opacity-50"
-                      >
-                        -
-                      </button>
-                      <span className="text-white">{item.qty}</span>
-                      <button
-                        onClick={() => handleQtyChange(item.qty + 1, item.product.id)}
-                        className="px-2 py-1 bg-gray-700 text-white rounded"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between w-full sm:w-auto mt-2 sm:mt-0">
-                  <p className="text-white font-bold text-sm sm:text-lg">${(item.price * item.qty).toFixed(2)}</p>
-                  <button
-                    onClick={() => handleDelete(item.id)}
-                    className="ml-4 p-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm sm:text-base"
-                  >
-                    🗑 Delete
-                  </button>
-                </div>
-              </div>
+              <CartItem
+                key={item.id}
+                item={item}
+                checked={checkedItems[item.id] ?? item.checked}
+                onCheck={(e) => handleCheck(item.id, e.target.checked)}
+                onQtyChange={handleQtyChange}
+                onDelete={() => handleDelete(item.id)}
+              />
             ))}
           </div>
 
-          {/* Total Price & Buy Button */}
           <div className="mt-6 flex flex-col sm:flex-row justify-between items-center">
             <p className="text-xl text-white font-bold">Total: ${totalPrice.toFixed(2)}</p>
-            <button
+            <ButtonOnclick
+              label="Buy"
               onClick={handleBuy}
               disabled={totalPrice === 0}
               className="px-4 py-2 mt-3 sm:mt-0 bg-green-500 text-white rounded disabled:opacity-50"
-            >
-              Buy
-            </button>
+            />
           </div>
         </>
       )}

@@ -82,7 +82,7 @@ export async function createOrder(token) {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data.data;
+    return response;
   } catch (err) {
     console.log("Failed to create order");
     return err;
